@@ -119,3 +119,18 @@ print(f"\nsales_row:\n{sales_row}")
 first_Sales = sales_row.groupby("store_nbr")["date"].min()
 print(f"\n sales date:\n{first_Sales}")
 print(f"\n{len(first_Sales)}")
+print(f"\n{train.shape}")
+
+first_table = first_Sales.reset_index()
+first_table.columns = ["store_nbr", "first_sale_date"]
+print(first_table.head())
+cleaned = pd.merge(train, first_table, on="store_nbr")
+print(cleaned.shape)
+
+before = len(cleaned)
+cleaned = cleaned[cleaned["date"] >= cleaned["first_sale_date"]]
+after = len(cleaned)
+print(before, after, before - after)
+
+print(f"\n{cleaned.groupby('store_nbr')['date'].min().head(10)}")
+print(f"\n{cleaned[cleaned['store_nbr'] == 52]['date'].min()}")
