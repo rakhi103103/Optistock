@@ -1,0 +1,29 @@
+# Data (too big for GitHub; download from Kaggle instead)
+data/sample/*.csv
+data/*.csv
+*.zip
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Secrets (never upload these)
+.env
+
+# Editor and OS files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Saved models (can be large; add later if small)
+*.pkl
+*.joblib
+
+# Your private notes (optional, remove this line if you want them public)
+*.docx
