@@ -106,3 +106,16 @@ after_open = train[(train["store_nbr"]==52)&(train["date"]>="2017-04-20")]
 print(f"result of store 52 after the date 2017-04-20: \n{after_open} ")
 mean_after = after_open["sales"].mean()
 print(f"\n this is the result after the average sales after opening the shop: \n{mean_after}")
+
+#checking max sales before 2017-04-20 i store 52
+sales_before = train[(train["date"]<"2017-04-20")&(train["store_nbr"]==52)]
+print(f"\nsales before 2017-04-20: \n{sales_before}")
+max_sales = sales_before["sales"].max()
+print(f"\n {max_sales}\n")
+
+#keeping ponly the sales >0 from the other store
+sales_row = train[train["sales"]>0]
+print(f"\nsales_row:\n{sales_row}")
+first_Sales = sales_row.groupby("store_nbr")["date"].min()
+print(f"\n sales date:\n{first_Sales}")
+print(f"\n{len(first_Sales)}")
