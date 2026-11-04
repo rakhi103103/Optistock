@@ -134,3 +134,24 @@ print(before, after, before - after)
 
 print(f"\n{cleaned.groupby('store_nbr')['date'].min().head(10)}")
 print(f"\n{cleaned[cleaned['store_nbr'] == 52]['date'].min()}")
+
+#exploring oil csv
+oil = pd.read_csv("data/sample/oil.csv")
+print(f"head: {oil.head(10)}")
+print(f"\n shape of column and rows: {oil.shape}")
+print(f"\n datatypes in this oil dataset: \n {oil.dtypes}")
+
+
+#converting date column from string to datetime
+oil["date"] = pd.to_datetime(oil["date"])
+print(f"\n searching null values: \n{oil.isnull().sum()}")
+
+print(f"\n oil date earlier: {oil['date'].min()}")
+print(f"\n oil date latest: {oil['date'].max()}")
+print(f"\n train date earlier: {train['date'].min()}")
+print(f"\n train date latest: {train['date'].max()}")
+
+total_days = (train["date"].max()-train["date"].min()).days+1
+print(f"\n total days: \n {total_days}")
+
+print(f"\n {oil[oil['dcoilwtico'].isnull()]}")
