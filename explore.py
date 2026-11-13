@@ -155,3 +155,64 @@ total_days = (train["date"].max()-train["date"].min()).days+1
 print(f"\n total days: \n {total_days}")
 
 print(f"\n {oil[oil['dcoilwtico'].isnull()]}")
+
+#holiday_csv
+holiday = pd.read_csv("data/sample/holidays_events.csv")
+print(f"head: {holiday.head(10)}")
+print(f"\n shape of column and rows: {holiday.shape}")
+print(f"\n datatypes in this holiday dataset: \n {holiday.dtypes}")
+
+
+#converting date column from string to datetime
+holiday["date"] = pd.to_datetime(holiday["date"])
+print(f"\n searching null values: \n{holiday.isnull().sum()}")
+
+print(f"\n{holiday['date'].min(), holiday['date'].max()}")
+print(f"\n{holiday['type'].value_counts()}")
+print(f"\n{holiday['locale'].value_counts()}")
+print(f"\n{holiday[holiday['transferred'] == True].head(10)}")
+
+print(f"\n\n\noil details: {oil.head()}")
+oil_null = oil[oil["dcoilwtico"].isnull()]
+print(f"\n {oil_null}")
+
+names = oil_null["date"].dt.day_name().value_counts()
+print(f"\n names of the day oil is null: \n{names}")
+
+#how many oil rows comes after 2017-08-15
+oil_after = oil[oil["date"]>"2017-08-15"]
+print(f"\n {oil_after}")
+
+dates_range = pd.date_range(start="2013-01-01", end="2017-08-15")
+dates_missing = dates_range.difference(train["date"])
+
+#what are the top 5 family product by shares of zero sales row
+print(train.head())
+# 1. Zero share by family (cleaned table)
+zero_share = (cleaned["sales"] == 0).groupby(cleaned["family"]).mean()
+print(zero_share.sort_values(ascending=False).head(5))
+
+# 2. Transferred holidays
+print(holiday["transferred"].sum())
+print(holiday[holiday["type"] == "Transfer"])
+
+# 3. Bridge, Work Day, Event
+print(holiday[holiday["type"] == "Bridge"])
+print(holiday[holiday["type"] == "Work Day"])
+print(holiday[holiday["type"] == "Event"]["description"].value_counts().head(10))
+
+# 4. Do holiday places match store places?
+local_names = holiday[holiday["locale"] == "Local"]["locale_name"]
+regional_names = holiday[holiday["locale"] == "Regional"]["locale_name"]
+print(local_names[~local_names.isin(stores["city"])].unique())
+print(regional_names[~regional_names.isin(stores["state"])].unique())
+
+# 5. Transactions
+transactions = pd.read_csv("data/sample/transactions.csv")
+transactions["date"] = pd.to_datetime(transactions["date"])
+print(transactions.head())
+print(transactions.shape)
+print(transactions.dtypes)
+print(transactions.isnull().sum())
+print(transactions["date"].min(), transactions["date"].max())
+print(transactions["store_nbr"].nunique())
