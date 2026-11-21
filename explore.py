@@ -188,31 +188,31 @@ dates_missing = dates_range.difference(train["date"])
 
 #what are the top 5 family product by shares of zero sales row
 print(train.head())
-# 1. Zero share by family (cleaned table)
-zero_share = (cleaned["sales"] == 0).groupby(cleaned["family"]).mean()
-print(zero_share.sort_values(ascending=False).head(5))
+# 1. Zero share by family 
+zero_share = (cleaned['sales'] == 0).groupby(cleaned['family']).mean()
+print(f"\ntop 5 families by zero-sales share: \n{zero_share.sort_values(ascending=False).head(5)}")
 
 # 2. Transferred holidays
-print(holiday["transferred"].sum())
-print(holiday[holiday["type"] == "Transfer"])
+print(f"\nrows with transferred = True: \n{holiday['transferred'].sum()}")
+print(f"\nTransfer rows: \n{holiday[holiday['type'] == 'Transfer']}")
 
 # 3. Bridge, Work Day, Event
-print(holiday[holiday["type"] == "Bridge"])
-print(holiday[holiday["type"] == "Work Day"])
-print(holiday[holiday["type"] == "Event"]["description"].value_counts().head(10))
+print(f"\nBridge rows: \n{holiday[holiday['type'] == 'Bridge']}")
+print(f"\nWork Day rows: \n{holiday[holiday['type'] == 'Work Day']}")
+print(f"\ntop Event descriptions: \n{holiday[holiday['type'] == 'Event']['description'].value_counts().head(10)}")
 
 # 4. Do holiday places match store places?
-local_names = holiday[holiday["locale"] == "Local"]["locale_name"]
-regional_names = holiday[holiday["locale"] == "Regional"]["locale_name"]
-print(local_names[~local_names.isin(stores["city"])].unique())
-print(regional_names[~regional_names.isin(stores["state"])].unique())
+local_names = holiday[holiday['locale'] == 'Local']['locale_name']
+regional_names = holiday[holiday['locale'] == 'Regional']['locale_name']
+print(f"\nlocal holiday places not in store cities: \n{local_names[~local_names.isin(stores['city'])].unique()}")
+print(f"\nregional holiday places not in store states: \n{regional_names[~regional_names.isin(stores['state'])].unique()}")
 
 # 5. Transactions
 transactions = pd.read_csv("data/sample/transactions.csv")
-transactions["date"] = pd.to_datetime(transactions["date"])
-print(transactions.head())
-print(transactions.shape)
-print(transactions.dtypes)
-print(transactions.isnull().sum())
-print(transactions["date"].min(), transactions["date"].max())
-print(transactions["store_nbr"].nunique())
+transactions['date'] = pd.to_datetime(transactions['date'])
+print(f"\ntransactions head: \n{transactions.head()}")
+print(f"\ntransactions shape: \n{transactions.shape}")
+print(f"\ntransactions datatypes: \n{transactions.dtypes}")
+print(f"\ntransactions missing values: \n{transactions.isnull().sum()}")
+print(f"\ntransactions date range: \n{transactions['date'].min()} to {transactions['date'].max()}")
+print(f"\nunique stores in transactions: \n{transactions['store_nbr'].nunique()}")
